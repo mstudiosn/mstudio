@@ -204,7 +204,7 @@ export default function Home() {
   viewport={{ once: true }}
 >
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-200 bg-yellow-50 text-yellow-700 text-xs md:text-base font-medium mb-6 md:mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-200 bg-yellow-50 text-yellow-700 text-xs md:text-base font-medium mt-8 md:mt-0 mb-6 md:mb-8">
           🇸🇳 Design • Branding • Développement Web
          </div>
         <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold text-[#111111] leading-tight">
