@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -18,18 +19,42 @@ export const metadata: Metadata = {
     "M.Studio accompagne les entrepreneurs dans la création de leur identité visuelle, de leur branding et de sites web modernes et performants.",
 
   keywords: [
-    "M.Studio",
-    "Design",
-    "Branding",
-    "Développement Web",
-    "Création de site web",
-    "Identité visuelle",
-    "Logo",
-    "Graphisme",
-    "Agence digitale",
-    "Montréal",
-    "Canada",
-    "Sénégal",
+"Création site web Montréal",
+  "Agence web Montréal",
+  "Développeur web Montréal",
+  "Graphiste Montréal",
+  "Création logo Montréal",
+  "Branding Montréal",
+  "Création affiche Montréal",
+  "Agence de design Montréal",
+  "Création site web Canada",
+  "Agence web Canada",
+  "Développement web",
+  "Conception de site web",
+  "Site vitrine",
+  "Site e-commerce",
+  "Web Design",
+  "UX/UI Design",
+  "SEO",
+  "Référencement naturel",
+  "Identité visuelle",
+  "Création de logo",
+  "Logo professionnel",
+  "Graphisme",
+  "Design graphique",
+  "Communication visuelle",
+  "Charte graphique",
+  "Branding",
+  "Image de marque",
+  "Flyer",
+  "Affiche publicitaire",
+  "Brochure",
+  "Carte de visite",
+  "Agence digitale",
+  "M.Studio",
+  "Montréal",
+  "Canada",
+  "Sénégal"
   ],
 
   authors: [{ name: "Moussa Dider Ndiaye - M.Studio" }],
@@ -63,7 +88,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+  {children}
+  <Analytics />
+</body>
     </html>
   );
 }
