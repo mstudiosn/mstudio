@@ -326,30 +326,30 @@ export default function Home() {
     Pourquoi choisir M.Studio ?
   </h2>
 
-  <div className="grid md:grid-cols-2 gap-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full">
 
-    <div className="bg-white p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
+    <div className="bg-white w-full p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
       <h3 className="text-3xl font-bold text-black">⚡ Rapide et efficace</h3>
       <p className="text-gray-600">
         Livraison rapide et travail professionnel.
       </p>
     </div>
 
-    <div className="bg-white p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
+    <div className="bg-white w-full p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
       <h3 className="text-3xl font-bold text-black">🎨 Design moderne</h3>
       <p className="text-gray-600">
         Des créations uniques adaptées à votre image.
       </p>
     </div>
 
-    <div className="bg-white p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
+    <div className="bg-white w-full p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
       <h3 className="text-3xl font-bold text-black">📱 Responsive</h3>
       <p className="text-gray-600">
         Des sites optimisés pour ordinateur, tablette et mobile.
       </p>
     </div>
 
-    <div className="bg-white p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
+    <div className="bg-white w-full p-6 md:p-10 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-xl transition duration-300">
       <h3 className="text-3xl font-bold text-black">🤝 Accompagnement personnalisé</h3>
       <p className="text-gray-600">
         Nous vous accompagnons de l'idée jusqu'au résultat final.
@@ -406,7 +406,7 @@ export default function Home() {
 </section>
 {/* Contact */}
 <section id="contact" className="py-20 md:py-32 px-5 md:px-8 text-center">
-  <h2 className="text-5xl font-bold text-black mb-8">
+  <h2 className="text-4xl md:text-5xl font-bold text-black mb-8">
     Prêt à donner vie à votre projet ?
   </h2>
 
