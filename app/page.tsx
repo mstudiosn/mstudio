@@ -1,24 +1,12 @@
-"use client";
-import { useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronDown,
-  Code2,
-  Layers,
-  Menu,
-  Moon,
-  Palette,
-  Smartphone,
-  Sun,
-  Users,
-  Wand2,
-  X,
-  Zap,
-} from "lucide-react";
-import QuoteModal from "@/components/QuoteModal";
+import { Code2, Layers, Palette, Smartphone, Users, Wand2, Zap } from "lucide-react";
 import AppIcon from "@/components/AppIcon";
+import RegistrationMark from "@/components/RegistrationMark";
+import SectionEyebrow from "@/components/SectionEyebrow";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import FaqAccordion from "@/components/FaqAccordion";
 
 const MARQUEE_WORDS = [
   "DESIGN",
@@ -106,75 +94,7 @@ const WHY_CHOOSE = [
   },
 ];
 
-const FAQS = [
-  {
-    question: "Combien coûte un projet ?",
-    answer:
-      "Chaque projet est unique. Contactez-nous pour obtenir un devis personnalisé.",
-  },
-  {
-    question: "Combien de temps prend la réalisation ?",
-    answer: "Selon la complexité du projet, cela peut prendre quelques mois.",
-  },
-  { 
-    question: "Travaillez-vous à distance ?",
-    answer: "Oui, nous collaborons avec des clients partout dans le monde.",
-  },
-  {
-    question: "Proposez-vous des modifications ?",
-    answer:
-      "Oui, nous travaillons avec vous jusqu'à obtenir un résultat satisfaisant.",
-  },
-];
-
-function RegistrationMark({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      aria-hidden="true"
-      fill="none"
-    >
-      <circle cx="12" cy="12" r="7" stroke="currentColor" strokeWidth="1" />
-      <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" strokeWidth="1" />
-      <line x1="1" y1="12" x2="23" y2="12" stroke="currentColor" strokeWidth="1" />
-    </svg>
-  );
-}
-
-function SectionEyebrow({ label }: { label: string }) {
-  return (
-    <p className="font-mono text-xs uppercase tracking-[0.2em] text-yellow-600 dark:text-yellow-500 mb-3">
-      — {label}
-    </p>
-  );
-}
-
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [quoteOpen, setQuoteOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isDark, setIsDark] = useState(false);
-
-  useLayoutEffect(() => {
-    const stored = localStorage.getItem("theme");
-    const prefersDark = stored
-      ? stored === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (prefersDark) {
-      document.documentElement.classList.add("dark");
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with a client-only preference (localStorage/matchMedia) that isn't knowable during SSR
-      setIsDark(true);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-  };
-
   return (
     <main className="min-h-screen bg-[#FAFAF8] dark:bg-[#0a0a0a] relative overflow-hidden transition-colors duration-300">
       <div className="absolute top-10 left-0 opacity-90 pointer-events-none">
@@ -191,168 +111,9 @@ export default function Home() {
       </div>
       <div className="absolute -top-64 -left-64 w-[700px] h-[700px] rounded-full bg-yellow-200/10 blur-[250px]"></div>
       <div className="relative z-10">
-        {/* Navbar */}
-        <nav className="fixed top-0 left-0 w-full z-50 h-24 md:h-28 flex items-center justify-between px-5 md:px-12 bg-white/90 dark:bg-black/80 backdrop-blur-md border-b border-stone-100 dark:border-white/10 shadow-sm transition-colors duration-300">
-          <div className="flex items-center gap-4">
-            <Image
-              src={isDark ? "/logo-dark.png" : "/logo.png"}
-              alt="M.Studio Logo"
-              width={150}
-              height={150}
-              className="w-20 md:w-28 h-auto"
-              priority
-            />
-          </div>
+        <Navbar />
 
-          <div className="hidden md:flex gap-8 text-stone-700 dark:text-stone-300">
-            <a href="#accueil">Accueil</a>
-            <a href="#services">Services</a>
-            <a href="#projets">Projets</a>
-            <a href="#contact">Contact</a>
-          </div>
-
-          <div className="flex items-center gap-3 md:gap-4">
-            {/* Bouton thème */}
-            <button
-              onClick={toggleTheme}
-              aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-              suppressHydrationWarning
-              className="p-2 md:p-3 rounded-full text-black dark:text-white hover:bg-stone-100 dark:hover:bg-white/10 transition"
-            >
-              {isDark ? <Sun size={22} /> : <Moon size={22} />}
-            </button>
-
-            {/* Bouton desktop */}
-            <button
-              onClick={() => setQuoteOpen(true)}
-              className="hidden md:block bg-yellow-400 px-6 py-3 rounded-full text-sm font-semibold text-black hover:bg-yellow-300 transition duration-300 shadow-md"
-            >
-              Discutons de votre projet
-            </button>
-
-            {/* Bouton menu mobile */}
-            <button
-              className="md:hidden p-2 rounded-lg text-black dark:text-white hover:bg-stone-100 dark:hover:bg-white/10 transition"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? (
-                <X size={36} strokeWidth={2.5} />
-              ) : (
-                <Menu size={36} strokeWidth={2.5} />
-              )}
-            </button>
-          </div>
-        </nav>
-        {menuOpen && (
-          <div className="fixed inset-0 z-[100] md:hidden">
-            {/* Fond sombre */}
-            <div
-              className="absolute inset-0 bg-black/40"
-              onClick={() => setMenuOpen(false)}
-            ></div>
-
-            {/* Menu */}
-            <div className="absolute right-0 top-0 h-full w-72 bg-white dark:bg-[#111111] shadow-2xl p-8 flex flex-col">
-              <button
-                className="self-end mb-8 p-2 rounded-full hover:bg-stone-100 dark:hover:bg-white/10 transition"
-                onClick={() => setMenuOpen(false)}
-              >
-                <X size={32} className="text-black dark:text-white" />
-              </button>
-
-              <a
-                href="#accueil"
-                onClick={() => setMenuOpen(false)}
-                className="text-xl font-semibold text-black dark:text-white py-4 border-b border-stone-200 dark:border-white/10 hover:text-yellow-500 transition"
-              >
-                Accueil
-              </a>
-
-              <a
-                href="#services"
-                onClick={() => setMenuOpen(false)}
-                className="text-xl font-semibold text-black dark:text-white py-4 border-b border-stone-200 dark:border-white/10 hover:text-yellow-500 transition"
-              >
-                Services
-              </a>
-
-              <a
-                href="#projets"
-                onClick={() => setMenuOpen(false)}
-                className="text-xl font-semibold text-black dark:text-white py-4 border-b border-stone-200 dark:border-white/10 hover:text-yellow-500 transition"
-              >
-                Projets
-              </a>
-
-              <a
-                href="#contact"
-                onClick={() => setMenuOpen(false)}
-                className="text-xl font-semibold text-black dark:text-white py-4 border-b border-stone-200 dark:border-white/10 hover:text-yellow-500 transition"
-              >
-                Contact
-              </a>
-
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  setQuoteOpen(true);
-                }}
-                className="mt-8 bg-yellow-400 text-center py-4 rounded-full font-semibold hover:bg-yellow-300 transition"
-              >
-                Discutons de votre projet
-              </button>
-            </div>
-          </div>
-        )}
-        {/* Hero */}
-        <motion.section
-          id="accueil"
-          className="relative flex flex-col items-center justify-center text-center pt-32 md:pt-40 px-5 md:px-6 z-10"
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <RegistrationMark className="hidden md:block absolute top-24 right-6 w-6 h-6 text-yellow-500/50" />
-
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-stone-300 dark:border-white/20 text-[11px] md:text-xs font-mono uppercase tracking-widest text-stone-600 dark:text-stone-400 mt-8 md:mt-0 mb-6 md:mb-8">
-            🇸🇳 Design · Branding · Développement Web
-          </div>
-          <h1 className="font-display font-semibold text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#111111] dark:text-white leading-[1.05] tracking-tight">
-            Nous créons des{" "}
-            <span className="relative inline-block whitespace-nowrap">
-              <span className="relative z-10">marques.</span>
-              <span
-                aria-hidden="true"
-                className="absolute left-0 right-0 bottom-1 md:bottom-3 h-3 md:h-5 bg-yellow-300 dark:bg-yellow-500/40 -rotate-1"
-              />
-            </span>
-            <br />
-            Pas juste des designs.
-          </h1>
-
-          <p className="mt-6 md:mt-8 max-w-xl md:max-w-2xl text-lg md:text-xl text-stone-600 dark:text-stone-400">
-            Nous aidons les entrepreneurs à transformer leurs idées en marques
-            fortes et mémorables grâce au design, au branding et au développement
-            web.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 mt-8 md:mt-10 w-full sm:w-auto">
-            <a
-              href="#services"
-              className="bg-yellow-400 px-7 py-4 rounded-full font-semibold hover:bg-yellow-300 transition w-full sm:w-auto text-center"
-            >
-              Découvrir nos services
-            </a>
-
-            <a
-              href="#projets"
-              className="border border-black dark:border-white text-black dark:text-white px-7 py-4 rounded-full font-semibold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition w-full sm:w-auto text-center"
-            >
-              Voir nos projets
-            </a>
-          </div>
-        </motion.section>
+        <Hero />
 
         {/* Bande défilante */}
         <div className="mt-16 md:mt-24 w-full border-y border-stone-200 dark:border-white/10 py-4 overflow-hidden relative z-10">
@@ -502,49 +263,7 @@ export default function Home() {
               </h2>
             </div>
 
-            <div>
-              {FAQS.map((faq, i) => {
-                const isOpen = openFaq === i;
-                return (
-                  <div
-                    key={faq.question}
-                    className="border-b border-stone-200 dark:border-white/10"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(isOpen ? null : i)}
-                      aria-expanded={isOpen}
-                      className="w-full flex items-center justify-between gap-4 py-6 text-left"
-                    >
-                      <span className="text-lg md:text-xl font-semibold text-black dark:text-white">
-                        {faq.question}
-                      </span>
-                      <ChevronDown
-                        size={20}
-                        className={`shrink-0 text-stone-400 transition-transform duration-300 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25 }}
-                          className="overflow-hidden"
-                        >
-                          <p className="pb-6 text-stone-600 dark:text-stone-400">
-                            {faq.answer}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
+            <FaqAccordion />
           </div>
         </section>
 
@@ -612,8 +331,6 @@ export default function Home() {
       >
         <FaWhatsapp size={20} />
       </a>
-
-      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </main>
   );
 }

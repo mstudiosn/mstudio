@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
   Code2,
@@ -88,13 +87,9 @@ function ProgressBar({ step }: { step: number }) {
 
       <div className="mt-4 h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
 
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${step * 20}%` }}
-          transition={{
-            duration: 0.5,
-          }}
-          className="h-full rounded-full bg-yellow-400"
+        <div
+          style={{ width: `${step * 20}%` }}
+          className="h-full rounded-full bg-yellow-400 transition-[width] duration-500"
         />
 
       </div>
@@ -281,6 +276,7 @@ export default function QuoteModal({
 }: QuoteModalProps) {
 
   const [step, setStep] = useState(0);
+  const [isLoadingReview, setIsLoadingReview] = useState(false);
   const [formData, setFormData] = useState({
   name: "",
   company: "",
@@ -310,6 +306,19 @@ export default function QuoteModal({
       document.body.style.overflow = "";
     };
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (!isLoadingReview) return;
+
+    const timeoutId = setTimeout(() => {
+      setIsLoadingReview(false);
+      setStep(4);
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isLoadingReview]);
+
+  const goToReview = () => setIsLoadingReview(true);
 
   const toggleService = (service: string) => {
   setFormData((prev) => ({
@@ -397,26 +406,25 @@ const sendQuoteViaWhatsApp = () => {
 };
 
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          {/* Fond noir */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[999]"
-          />
+    <>
+      {/* Fond noir */}
+      <div
+        onClick={onClose}
+        aria-hidden="true"
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[999] transition-opacity duration-300 ${
+          open ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      />
 
-          {/* Fenêtre */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 40 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 flex items-center justify-center z-[1000] p-5"
-          >
+      {/* Fenêtre */}
+      <div
+        inert={!open}
+        className={`fixed inset-0 flex items-center justify-center z-[1000] p-5 transition-all duration-300 ${
+          open
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-10 pointer-events-none"
+        }`}
+      >
             <div
   onClick={(e) => e.stopPropagation()}
   role="dialog"
@@ -457,7 +465,16 @@ const sendQuoteViaWhatsApp = () => {
   <X size={22} className="text-gray-700 dark:text-gray-300" />
 </button>
 
-              {step === 0 && (
+              {isLoadingReview && (
+                <div className="flex flex-col items-center justify-center py-24">
+                  <div className="w-12 h-12 rounded-full border-4 border-gray-200 dark:border-gray-700 border-t-yellow-400 animate-spin" />
+                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                    Préparation de votre récapitulatif...
+                  </p>
+                </div>
+              )}
+
+              {!isLoadingReview && step === 0 && (
   <>
     <h2 className="text-4xl font-bold text-black dark:text-white mb-4 pr-16">
       Parlons de votre projet 👋
@@ -475,7 +492,7 @@ const sendQuoteViaWhatsApp = () => {
     </button>
   </>
 )}
-{step === 2 && (
+{!isLoadingReview && step === 2 && (
   <>
     <ProgressBar step={step} />
 
@@ -556,7 +573,7 @@ const sendQuoteViaWhatsApp = () => {
   </>
 )}
 
-{step === 3 && (
+{!isLoadingReview && step === 3 && (
   <>
     <ProgressBar step={step} />
 
@@ -620,7 +637,7 @@ const sendQuoteViaWhatsApp = () => {
 
       <button
         disabled={!formData.budget}
-        onClick={() => setStep(4)}
+        onClick={goToReview}
         className={`px-8 py-3 rounded-full font-semibold transition-all ${
           formData.budget
             ? "bg-yellow-400 hover:bg-yellow-300 text-black"
@@ -634,7 +651,7 @@ const sendQuoteViaWhatsApp = () => {
   </>
 )}
 
-{step === 1 && (
+{!isLoadingReview && step === 1 && (
   <>
  <ProgressBar step={step} />
  
@@ -768,19 +785,14 @@ const sendQuoteViaWhatsApp = () => {
   </>
 )}
 
-{step === 4 && (
+{!isLoadingReview && step === 4 && (
   <>
     <ProgressBar step={4} />
 
 <div className="text-center mb-10">
-  <motion.div
-    initial={{ scale: 0.8, opacity: 0 }}
-    animate={{ scale: 1, opacity: 1 }}
-    transition={{ duration: 0.4 }}
-    className="flex justify-center mb-4"
-  >
+  <div className="animate-pop-in-strong flex justify-center mb-4">
     <AppIcon icon={Check} gradient="from-green-400 to-emerald-600" size="lg" />
-  </motion.div>
+  </div>
 
   <h2 className="text-3xl font-bold text-black dark:text-white">
     Tout est prêt !
@@ -862,11 +874,10 @@ const sendQuoteViaWhatsApp = () => {
   <div className="flex flex-wrap gap-3">
 
     {formData.services.map((service) => (
-      <motion.div
+      <div
         key={service}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
         className="
+          animate-pop-in
           px-4
           py-2
           rounded-full
@@ -881,7 +892,7 @@ const sendQuoteViaWhatsApp = () => {
         "
       >
         ✓ {service}
-      </motion.div>
+      </div>
     ))}
 
   </div>
@@ -947,9 +958,7 @@ const sendQuoteViaWhatsApp = () => {
 )}
 
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+      </div>
+    </>
   );
 }
