@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Jost } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,10 +13,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const jost = Jost({
+  variable: "--font-jost",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const SITE_URL = "https://mstudioweb.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "M.Studio | Design • Branding • Développement Web",
   description:
     "M.Studio accompagne les entrepreneurs dans la création de leur identité visuelle, de leur branding et de sites web modernes et performants.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 
   keywords: [
 "Création site web Montréal",
@@ -65,6 +83,7 @@ export const metadata: Metadata = {
   title: "M.Studio",
   description:
     "Design • Branding • Développement Web pour les entrepreneurs et les entreprises.",
+  url: SITE_URL,
   siteName: "M.Studio",
   locale: "fr_CA",
   type: "website",
@@ -78,6 +97,19 @@ export const metadata: Metadata = {
   },
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "M.Studio",
+  image: `${SITE_URL}/logo.png`,
+  url: SITE_URL,
+  email: "mstudio.sn@gmail.com",
+  description:
+    "M.Studio accompagne les entrepreneurs dans la création de leur identité visuelle, de leur branding et de sites web modernes et performants.",
+  areaServed: ["Montréal", "Canada", "Sénégal"],
+  sameAs: ["https://instagram.com/m.studio.visual"],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -85,10 +117,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="fr"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${jost.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+  />
   {children}
   <Analytics />
 </body>
