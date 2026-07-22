@@ -154,21 +154,24 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem("theme");
-    return stored
-      ? stored === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [isDark, setIsDark] = useState(false);
 
   useLayoutEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark);
-  }, [isDark]);
+    const stored = localStorage.getItem("theme");
+    const prefersDark = stored
+      ? stored === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (prefersDark) {
+      document.documentElement.classList.add("dark");
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with a client-only preference (localStorage/matchMedia) that isn't knowable during SSR
+      setIsDark(true);
+    }
+  }, []);
 
   const toggleTheme = () => {
     const next = !isDark;
     setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
     localStorage.setItem("theme", next ? "dark" : "light");
   };
 
@@ -189,14 +192,14 @@ export default function Home() {
       <div className="absolute -top-64 -left-64 w-[700px] h-[700px] rounded-full bg-yellow-200/10 blur-[250px]"></div>
       <div className="relative z-10">
         {/* Navbar */}
-        <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-5 md:px-12 py-3 md:py-2 bg-white/90 dark:bg-black/80 backdrop-blur-md border-b border-stone-100 dark:border-white/10 shadow-sm transition-colors duration-300">
+        <nav className="fixed top-0 left-0 w-full z-50 h-20 md:h-28 flex items-center justify-between px-5 md:px-12 bg-white/90 dark:bg-black/80 backdrop-blur-md border-b border-stone-100 dark:border-white/10 shadow-sm transition-colors duration-300">
           <div className="flex items-center gap-4">
             <Image
               src={isDark ? "/logo-dark.png" : "/logo.png"}
               alt="M.Studio Logo"
               width={150}
               height={150}
-              className="w-28 md:w-[150px] h-auto"
+              className={isDark ? "w-16 md:w-24 h-auto" : "w-28 md:w-[150px] h-auto"}
               priority
             />
           </div>
