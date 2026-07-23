@@ -109,7 +109,7 @@ export default function Home() {
           }}
         />
       </div>
-      <div className="absolute -top-64 -left-64 w-[700px] h-[700px] rounded-full bg-yellow-200/10 blur-[250px]"></div>
+      <div className="hidden md:block absolute -top-64 -left-64 w-[700px] h-[700px] rounded-full bg-yellow-200/10 blur-[250px]"></div>
       <div className="relative z-10">
         <Navbar />
 
